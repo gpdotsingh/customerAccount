@@ -39,7 +39,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(ExceptionMessage.EXCEPTION_TIME.name(), LocalDateTime.now());
-        body.put(ExceptionMessage.INSSUFFICIENT_BALANCE.name(),ex.getLocalizedMessage());
         return new ResponseEntity<>(body,HttpStatus.PAYMENT_REQUIRED);
     }
 

@@ -26,10 +26,11 @@ public class CustomerDaoImpl implements CustomerDao{
                 .stream()
                 .map(accountEntity -> {
                             AccountEnum accountEnum = accountEntity.getAccountEnum();
+                            String accountNumber = accountEntity.getCurrentAccountEntity().getAccountNumber();
                             BigDecimal amount = accountEntity.getCurrentAccountEntity().getAmount();
                             LocalDateTime lastUpdatedTime = accountEntity.getCurrentAccountEntity().getLastUpdatedTime();
                             LocalDateTime creationTime = accountEntity.getCurrentAccountEntity().getAccountCreationTime();
-                            return new AccountModel(accountEnum, amount, lastUpdatedTime, creationTime, null);
+                            return new AccountModel(accountNumber,accountEnum,amount,creationTime,lastUpdatedTime,null);
                         }
                 ).collect(Collectors.toList());
 

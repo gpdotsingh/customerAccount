@@ -3,10 +3,7 @@ package com.capgemini.customeraccount.configuration;
 import com.capgemini.customeraccount.model.TransactionModel;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,16 +27,16 @@ public class TransactionLogging {
     @Autowired
     AppConfig appConfig;
     private  HttpHeaders headers;
+/*
 
-    @Pointcut(value = "execution(* com.capgemini.customeraccount.dao.AccountTransactionDaoImpl.updateCurrentAccount(..) )")
+    @Pointcut(value = "execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
     public void createAccount(){
         System.out.println("Transaction 1");
 
     }
+*/
 
-
-    //@Pointcut(value = "execution(*com.capgemini.customeraccount.dao.AccountTransactionDaoImpl.creditDebitOperation(..))")
-    @Around("createAccount()")
+    @Before("execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
     public Object transactionLogging(ProceedingJoinPoint pjp){
         System.out.println("Transaction 2");
 
@@ -53,7 +50,7 @@ public class TransactionLogging {
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String url = appConfig.getTransactionUrl();
+        String url = appConfig.getTransactioTypeURL();
         Map<String, String> params = new HashMap<String, String>();
         params.put("transactioType", "CREDIT");
 
@@ -62,12 +59,13 @@ public class TransactionLogging {
                 .toUri();
         uri = UriComponentsBuilder
                 .fromUri(uri)
-                .queryParam("transactionTime", LocalDateTime.now())
                 .queryParam("amount", 10)
                 .queryParam("custId", "customer1")
                 .queryParam("description", "Testing")
                 .queryParam("transactioType", "CREDIT")
                 .queryParam("transactionTime", LocalDateTime.now())
+                .queryParam("accountNumber", "asdlkkalsd")
+
                 .build()
                 .toUri();
         HttpEntity<String> request = new HttpEntity(headers);
@@ -83,4 +81,16 @@ public class TransactionLogging {
 
         return obj;
     }
+
+    /**
+     * This is the method which I would like to execute
+     * after a selected method execution throws exception.
+     */
+    @AfterThrowing(PointCut = "execution(* com.tutorialspoint.Student.*(..))",
+            throwing = "error")
+    public void afterThrowingAdvice(JoinPoint jp, Throwable error){
+        System.out.println("Method Signature: "  + jp.getSignature());
+        System.out.println("Exception: "+error);
+    }
+
 }

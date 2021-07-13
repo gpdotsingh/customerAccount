@@ -19,6 +19,7 @@ public class CustomerModel {
     private String lastName;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String middleName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<AccountModel> accounts;
 
     public CustomerModel(String custId, String firstName, String lastName, String middleName) {

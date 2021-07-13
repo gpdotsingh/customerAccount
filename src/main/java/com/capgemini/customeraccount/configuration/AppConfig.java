@@ -12,5 +12,6 @@ public class AppConfig {
 
     @Value("${tm.transactionUrl}")
     private String transactionUrl;
-
+    @Value("${tm.transactioTypeURL}")
+    private String transactioTypeURL;
 }

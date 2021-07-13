@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountModel {
+
+    @JsonProperty("account_Number")
+    private String accountNumber;
     @JsonProperty("account_type")
     private AccountEnum accountEnum;
     @JsonProperty("balance_amount")

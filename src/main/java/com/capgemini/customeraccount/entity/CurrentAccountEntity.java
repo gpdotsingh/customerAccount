@@ -36,6 +36,6 @@ public class CurrentAccountEntity {
     private AccountEntity accountEntity;
 
     public void setAccountNumber(String accountNumber) {
-        this.accountNumber = this.customerId;
+        this.accountNumber = "curraccount"+this.customerId ;
     }
 }
