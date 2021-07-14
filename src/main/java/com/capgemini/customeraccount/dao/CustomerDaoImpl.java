@@ -21,7 +21,7 @@ public class CustomerDaoImpl implements CustomerDao{
      */
     @Override
     public CustomerModel customerEntityToModel(Optional<CustomerEntity> customerEntity) {
-        List<AccountModel> accounts = customerEntity.get()
+        List<AccountModel> accounts = customerEntity.orElse(new CustomerEntity())
                 .getAccountEntity()
                 .stream()
                 .map(accountEntity -> {

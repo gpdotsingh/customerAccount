@@ -3,10 +3,12 @@ package com.capgemini.customeraccount.services;
 import com.capgemini.customeraccount.dao.CurrentAccountDao;
 import com.capgemini.customeraccount.dao.TransactionDao;
 import com.capgemini.customeraccount.enums.AccountEnum;
-import com.capgemini.customeraccount.enums.TransactionType;
+import com.capgemini.customeraccount.enums.ExceptionMessageEnum;
+import com.capgemini.customeraccount.enums.TransactionTypeEnum;
 import com.capgemini.customeraccount.exception.AccountException;
 import com.capgemini.customeraccount.exception.GenericException;
 import com.capgemini.customeraccount.model.AccountModel;
+import com.capgemini.customeraccount.model.CustomerModel;
 import com.capgemini.customeraccount.model.TransactionPageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,49 +23,56 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
     CurrentAccountDao currentAccountDao;
     @Autowired
     TransactionDao transactionDao;
+    @Autowired
+    CustomerServicesImpl customerServices;
 
     @Override
-    public AccountModel createAccount(String custId, AccountEnum accountType, BigDecimal amount) {
-        AccountModel accountModel = new AccountModel();
-        if (accountType == AccountEnum.CURRENT) {
-            currentAccountDao.createCurrentAccount(amount, custId);
-            accountModel = currentAccountDao.getCurrentAccountEntity(custId).get();
+    public AccountModel createAccount(String custId, AccountEnum accountType, BigDecimal amount,TransactionTypeEnum transactionTypeEnum) {
+
+        switch (transactionTypeEnum) {
+            case DEBIT:
+                throw new AccountException(ExceptionMessageEnum.INVALID_TRANSACTION_TYPE.name());
+        }
+                AccountModel accountModel = new AccountModel();
+
+        switch (accountType) {
+            case CURRENT:
+                currentAccountDao.createCurrentAccount(amount, custId);
+                accountModel = currentAccountDao.getCurrentAccountEntity(custId).get();
         }
         return accountModel;
     }
 
     /**
      * @param custId
-     * @param transactionType
+     * @param transactionTypeEnum
      * @param accountType
      * @param amount
      * @return
      */
     @Override
-    public AccountModel updateAccount(String custId, TransactionType transactionType, AccountEnum accountType, BigDecimal amount) {
-        //if account type is current account
-        if (accountType == AccountEnum.CURRENT && amount.compareTo(BigDecimal.ZERO) >= 0) {
-            Optional<AccountModel> currentAccountOptional
-                    = currentAccountDao.getCurrentAccountEntity(custId);
-            // if account exist update transaction else if transaction is CREDIT open new account else throw exception
-            if (currentAccountOptional.isPresent()) {
-                currentAccountDao.updateCurrentAccount(amount, transactionType, custId,currentAccountOptional.get().getAccountNumber());
+    public AccountModel updateAccount(String custId, TransactionTypeEnum transactionTypeEnum, AccountEnum accountType, BigDecimal amount,   Optional<AccountModel> currentAccountOptional) {
 
-            } else if (transactionType == TransactionType.CREDIT) {
-                currentAccountDao.createCurrentAccount(amount, custId);
-            } else {
-                throw new GenericException("Please open current account first");
-            }
+            currentAccountDao.updateCurrentAccount(amount, transactionTypeEnum, custId, currentAccountOptional.get().getAccountNumber());
             return currentAccountDao.getCurrentAccountEntity(custId).get();
-        }
-
-        throw new AccountException(transactionType.name());
     }
 
     @Override
     public TransactionPageModel getAccountTransaction(int pageNo, int pageSize, String accountNumber) {
         return transactionDao.getTransaction(pageSize, pageNo, accountNumber);
 
+    }
+
+    @Override
+    public Optional<AccountModel> verifyAccount(String custId, AccountEnum accountType) {
+
+        CustomerModel customerModel = customerServices.getCustomerByCustomerId(custId);
+
+        return customerModel
+                .getAccounts()
+                .stream()
+                .filter(accountModel -> accountModel.getAccountEnum().equals(accountType))
+                .findFirst();
     }
 
 

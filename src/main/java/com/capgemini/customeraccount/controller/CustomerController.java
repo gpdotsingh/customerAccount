@@ -8,19 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/customers/")
 public class CustomerController {
 
     @Autowired
     CustomerServices customerservices;
 
-    @GetMapping("/customers")
+    @GetMapping
     public Page<CustomerModel> cutomer(@RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
                                         @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
         return customerservices.getCustomers(pageNo,pageSize);
     }
-    // Looking into requirement it will include only current account list //
-    @GetMapping("/customers/{customerId}")
+
+    @GetMapping("{customerId}")
     public CustomerModel cutomerInfo(@PathVariable(name = "customerId", required = true) String customerId){
         return customerservices.getCustomerByCustomerId(customerId);
     }

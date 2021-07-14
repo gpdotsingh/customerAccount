@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 public class TransactionLogging {
 
     private Logger logger = LoggerFactory.getLogger(TransactionLogging.class);
-    private String amount; private String transactionType;private String custId ;private String accountNumber ; private String description;
 
     @Autowired
     TransactionDao transactionDao;
@@ -31,31 +30,31 @@ public class TransactionLogging {
 
     }
 
-    @Before("execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
-    public void logBeforeUpdateAccount(JoinPoint joinPoint) { System.out.println("---"+joinPoint.getSignature());
+    @AfterReturning("execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
+    public void logBeforeUpdateAccount(JoinPoint joinPoint) {
         initTransactionLogging(joinPoint);
     }
 
     @AfterReturning(pointcut="execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.createCurrentAccount(..) )",returning = "accountEntitySaved")
-    public void  logBeforeCreateAccount( AccountEntity accountEntitySaved) {
+    public void  logAfterCreateAccount( AccountEntity accountEntitySaved) {
 
-        logger.error(accountEntitySaved.getAccountEnum()+"  "+  accountEntitySaved.getCurrentAccountEntity().getAccountNumber()+"  "+        accountEntitySaved.getCurrentAccountEntity().getCustomerId());
-
+        logger.error(String.format("Account type %s, accountNumber:: %s, customerId:: %s, amount :: ",accountEntitySaved.getAccountEnum(),accountEntitySaved.getCurrentAccountEntity().getAccountNumber(), accountEntitySaved.getCurrentAccountEntity().getCustomerId()));
+        transactionDao.logTransaction(
+                String.valueOf(
+                        accountEntitySaved.getCurrentAccountEntity().getAmount())
+                , "CREDIT"
+                , accountEntitySaved.getCurrentAccountEntity().getCustomerId()
+                , accountEntitySaved.getCurrentAccountEntity().getAccountNumber()
+                , "Current account transaction");
     }
     private void initTransactionLogging(JoinPoint joinPoint) {
         Object[] signatureArgs = joinPoint.getArgs();
 
-        amount = String.valueOf(signatureArgs[0]) ;
-        transactionType = String.valueOf(signatureArgs[1]);
-        custId = String.valueOf(signatureArgs[2]);
-        accountNumber = String.valueOf(signatureArgs[3]);
+        String amount = String.valueOf(signatureArgs[0]) ;
+        String transactionType = String.valueOf(signatureArgs[1]);
+        String custId = String.valueOf(signatureArgs[2]);
+        String accountNumber = String.valueOf(signatureArgs[3]);
         transactionDao.logTransaction(amount, transactionType, custId, accountNumber, "Current account transaction");
     }
-
-
-
-
-
-
 
 }

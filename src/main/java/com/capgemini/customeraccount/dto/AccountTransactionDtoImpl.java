@@ -10,8 +10,7 @@ import java.util.Optional;
 public class AccountTransactionDtoImpl implements AccountTransactionDto{
 
     public AccountModel entityToModel(CurrentAccountEntity accountEntity) {
-        AccountModel accountModel = new AccountModel(accountEntity.getAccountNumber(),accountEntity.getAccountEntity().getAccountEnum(), accountEntity.getAmount(), accountEntity.getAccountCreationTime(), accountEntity.getLastUpdatedTime(), null);
-        return accountModel;
+        return new AccountModel(accountEntity.getAccountNumber(),accountEntity.getAccountEntity().getAccountEnum(), accountEntity.getAmount(), accountEntity.getAccountCreationTime(), accountEntity.getLastUpdatedTime(), null);
     }
 
     //Transform entity to model

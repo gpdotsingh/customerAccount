@@ -13,16 +13,16 @@ import java.util.Optional;
 
 public interface CurrentAcountRepo extends CrudRepository<CurrentAccountEntity,Long> {
 
-    Optional<CurrentAccountEntity> findByCustomerId(String custId);
+    Optional<CurrentAccountEntity> findByCustomerIdIgnoreCase(String custId);
 
     @Transactional
     @Modifying(clearAutomatically = true) // Refresh value after update
-    @Query("UPDATE current_account c SET c.amount = (c.amount + :amount) ,  lastUpdatedTime = :lastUpdatedTime WHERE c.customerId = :customerId and c.accountNumber = :accountNumber")
+    @Query("UPDATE current_account c SET c.amount = (c.amount + :amount) ,  lastUpdatedTime = :lastUpdatedTime WHERE lower(c.customerId) = :customerId and c.accountNumber = :accountNumber")
     int updateByCustId(@Param("customerId") String custId,@Param("amount") BigDecimal amount, @Param("lastUpdatedTime")LocalDateTime now, @Param("accountNumber") String accountNumber);
 
     @Transactional
     @Modifying(clearAutomatically = true) // Refresh value after update
-    @Query("UPDATE current_account c SET c.amount = (c.amount - :amount) , lastUpdatedTime = :lastUpdatedTime  WHERE c.customerId = :customerId and c.accountNumber = :accountNumber")
+    @Query("UPDATE current_account c SET c.amount = (c.amount - :amount) , lastUpdatedTime = :lastUpdatedTime  WHERE lower(c.customerId) = :customerId and c.accountNumber = :accountNumber")
     int updateByCustIdDecrement(@Param("customerId") String custId, @Param("amount") BigDecimal amount, @Param("lastUpdatedTime")LocalDateTime now, @Param("accountNumber") String accountNumber);
 
 }

@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Pageable{
-    public Sort sort;
-    public int offset;
-    public int pageNumber;
-    public int pageSize;
-    public boolean paged;
-    public boolean unpaged;
+    private Sort sort;
+    private int offset;
+    private int pageNumber;
+    private int pageSize;
+    private boolean paged;
+    private boolean unpaged;
 }

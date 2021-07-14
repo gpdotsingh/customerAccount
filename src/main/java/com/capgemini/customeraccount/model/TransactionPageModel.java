@@ -15,17 +15,17 @@ import java.util.List;
 @Getter
 @Setter
 public class TransactionPageModel{
-    public List<TransactionModel> content;
-    public Pageable pageable;
-    public int totalPages;
-    public int totalElements;
-    public boolean last;
-    public int size;
-    public int number;
-    public Sort sort;
-    public boolean first;
-    public int numberOfElements;
-    public boolean empty;
+    private List<TransactionModel> content;
+    private Pageable pageable;
+    private int totalPages;
+    private int totalElements;
+    private boolean last;
+    private int size;
+    private int number;
+    private Sort sort;
+    private boolean first;
+    private int numberOfElements;
+    private boolean empty;
 }
 
 

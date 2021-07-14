@@ -1,7 +1,7 @@
 package com.capgemini.customeraccount.dao;
 
 import com.capgemini.customeraccount.entity.AccountEntity;
-import com.capgemini.customeraccount.enums.TransactionType;
+import com.capgemini.customeraccount.enums.TransactionTypeEnum;
 import com.capgemini.customeraccount.model.AccountModel;
 
 import java.math.BigDecimal;
@@ -11,5 +11,5 @@ public interface CurrentAccountDao {
 
     AccountEntity createCurrentAccount(BigDecimal amount, String custId);
     Optional<AccountModel> getCurrentAccountEntity(String custId);
-    int updateCurrentAccount(BigDecimal amount, TransactionType transactionType, String custId,String accountNumber);
+    int updateCurrentAccount(BigDecimal amount, TransactionTypeEnum transactionTypeEnum, String custId, String accountNumber);
 }

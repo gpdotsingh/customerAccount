@@ -14,7 +14,7 @@
 	<name>customeraccount</name>
 	<description>project will contains customer and its basic details</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
 		<!-- H2 database configuration-->
@@ -119,6 +119,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+					<finalName>cutomer-accouunt</finalName>
+				</configuration>
 			</plugin>
 
 			<plugin>

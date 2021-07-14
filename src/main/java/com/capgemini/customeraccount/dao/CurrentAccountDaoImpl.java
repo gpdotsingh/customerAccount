@@ -5,8 +5,8 @@ import com.capgemini.customeraccount.entity.AccountEntity;
 import com.capgemini.customeraccount.entity.CurrentAccountEntity;
 import com.capgemini.customeraccount.entity.CustomerEntity;
 import com.capgemini.customeraccount.enums.AccountEnum;
-import com.capgemini.customeraccount.enums.ExceptionMessage;
-import com.capgemini.customeraccount.enums.TransactionType;
+import com.capgemini.customeraccount.enums.ExceptionMessageEnum;
+import com.capgemini.customeraccount.enums.TransactionTypeEnum;
 import com.capgemini.customeraccount.exception.GenericException;
 import com.capgemini.customeraccount.model.AccountModel;
 import com.capgemini.customeraccount.repository.AccountRepo;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -44,16 +45,16 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
         AccountEntity accountEntitySaved = null;
         try {
             // Get customer
-            Optional<CustomerEntity> customer = customerRepo.findByCustomerId(custId);
+            Optional<CustomerEntity> customer = customerRepo.findByCustomerIdIgnoreCase(custId);
             // Create account
             AccountEntity accountEntity = new AccountEntity();
             accountEntity.setAccountEnum(AccountEnum.CURRENT);
-            accountEntity.setCustomer(customer.get());
+            accountEntity.setCustomer(customer.orElseThrow( ()->new GenericException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name())));
             // Create current account
             CurrentAccountEntity currentAccountEntity = new CurrentAccountEntity();
             currentAccountEntity.setCustomerId(custId);
             currentAccountEntity.setLastUpdatedTime(LocalDateTime.now());
-            currentAccountEntity.setAccountNumber(custId);
+            currentAccountEntity.setAccountNumber(custId.trim().toUpperCase(Locale.ROOT));
             currentAccountEntity.setAccountEntity(accountEntity);
             currentAccountEntity.setAmount(amount);
             currentAccountEntity.setAccountCreationTime(LocalDateTime.now());
@@ -62,29 +63,29 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
             accountEntitySaved = accountRepo.save(accountEntity);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new GenericException("Please check db");
+            throw new GenericException(ExceptionMessageEnum.KINDLY_VERIFY_CUSTOMER.toString());
         }
         return accountEntitySaved;
     }
 
     @Override
-    public int updateCurrentAccount(BigDecimal amount, TransactionType transactionType, String custId,String accountNumber) {
+    public int updateCurrentAccount(BigDecimal amount, TransactionTypeEnum transactionTypeEnum, String custId, String accountNumber) {
         int updateStatus = - 1;
         try {
-            if (transactionType == TransactionType.CREDIT) {
-                updateStatus = currentAcountRepo.updateByCustId(custId, amount, LocalDateTime.now(),accountNumber);
+            if (transactionTypeEnum == TransactionTypeEnum.CREDIT) {
+                updateStatus = currentAcountRepo.updateByCustId(custId.trim().toLowerCase(Locale.ROOT), amount, LocalDateTime.now(),accountNumber);
             }
-            else if (transactionType == TransactionType.DEBIT) {
-                updateStatus = currentAcountRepo.updateByCustIdDecrement(custId, amount, LocalDateTime.now(),accountNumber); }
+            else if (transactionTypeEnum == TransactionTypeEnum.DEBIT) {
+                updateStatus = currentAcountRepo.updateByCustIdDecrement(custId.trim().toLowerCase(Locale.ROOT), amount, LocalDateTime.now(),accountNumber); }
         }
         catch (DataIntegrityViolationException dataIntegrityViolationException) {
             logger.error(dataIntegrityViolationException.getMessage());
-            throw new GenericException(ExceptionMessage.INSSUFFICIENT_BALANCE.name());
+            throw new GenericException(ExceptionMessageEnum.INSSUFFICIENT_BALANCE.name());
         }
 
         catch (Exception e) {
             logger.error(e.getMessage());
-            throw new GenericException(ExceptionMessage.TRY_AFTER_SOMETIME.name());
+            throw new GenericException(ExceptionMessageEnum.TRY_AFTER_SOMETIME.name());
         }
         return updateStatus;
     }
@@ -92,7 +93,7 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
     @Override
     public Optional<AccountModel> getCurrentAccountEntity(String custId) {
         // Check account exists
-        Optional<CurrentAccountEntity> customerInfo = currentAcountRepo.findByCustomerId(custId);
+        Optional<CurrentAccountEntity> customerInfo = currentAcountRepo.findByCustomerIdIgnoreCase(custId.trim().toLowerCase(Locale.ROOT));
         return accountTransactionDto.getCurrentAccount(customerInfo);
     }
 

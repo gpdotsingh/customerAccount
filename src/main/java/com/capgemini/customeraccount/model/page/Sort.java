@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Sort{
-    public boolean sorted;
-    public boolean unsorted;
-    public boolean empty;
+    private boolean sorted;
+    private boolean unsorted;
+    private boolean empty;
 }

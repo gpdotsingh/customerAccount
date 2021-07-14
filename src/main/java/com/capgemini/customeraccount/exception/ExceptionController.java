@@ -1,6 +1,6 @@
 package com.capgemini.customeraccount.exception;
 
-import com.capgemini.customeraccount.enums.ExceptionMessage;
+import com.capgemini.customeraccount.enums.ExceptionMessageEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,8 +20,8 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> customerNotFound(
             CustomerNotFoundException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put(ExceptionMessage.EXCEPTION_TIME.name(), LocalDateTime.now());
-        body.put(ExceptionMessage.CUSTOMER_NOT_FOUND.name(), ex.getLocalizedMessage());
+        body.put(ExceptionMessageEnum.EXCEPTION_TIME.name(), LocalDateTime.now());
+        body.put(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name(), ex.getLocalizedMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
@@ -29,8 +29,8 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> invalidAccount(
             AccountException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put(ExceptionMessage.EXCEPTION_TIME.name(), LocalDateTime.now());
-        body.put(ExceptionMessage.INVALID_ACCOUNT_TYPE.name(), ex.getLocalizedMessage());
+        body.put(ExceptionMessageEnum.EXCEPTION_TIME.name(), LocalDateTime.now());
+        body.put(ExceptionMessageEnum.INVALID_ACCOUNT_TYPE.name(), ex.getLocalizedMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
@@ -38,7 +38,8 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> genericExceptions(GenericException ex,WebRequest request)
     {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put(ExceptionMessage.EXCEPTION_TIME.name(), LocalDateTime.now());
+        body.put(ExceptionMessageEnum.EXCEPTION_TIME.name(), LocalDateTime.now());
+        body.put(ExceptionMessageEnum.ERROR.name(), ex.getLocalizedMessage());
         return new ResponseEntity<>(body,HttpStatus.PAYMENT_REQUIRED);
     }
 

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -33,9 +34,8 @@ public class CustomerServicesImpl implements CustomerServices {
     @Override
     public CustomerModel getCustomerByCustomerId(String customerId) {
 
-        Optional<CustomerEntity> customerEntity = customerRepo.findByCustomerId(customerId);
+        Optional<CustomerEntity> customerEntity = customerRepo.findByCustomerIdIgnoreCase(customerId.trim().toLowerCase(Locale.ROOT));
         if (customerEntity.isPresent()) {
-            //To do : add account Model Page
             return customerDao.customerEntityToModel(customerEntity);
         }
         throw new CustomerNotFoundException(customerId);
