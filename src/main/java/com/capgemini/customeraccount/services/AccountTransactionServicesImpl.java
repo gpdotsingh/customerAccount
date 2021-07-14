@@ -47,7 +47,7 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
                     = currentAccountDao.getCurrentAccountEntity(custId);
             // if account exist update transaction else if transaction is CREDIT open new account else throw exception
             if (currentAccountOptional.isPresent()) {
-                currentAccountDao.updateCurrentAccount(amount, transactionType, custId);
+                currentAccountDao.updateCurrentAccount(amount, transactionType, custId,currentAccountOptional.get().getAccountNumber());
 
             } else if (transactionType == TransactionType.CREDIT) {
                 currentAccountDao.createCurrentAccount(amount, custId);

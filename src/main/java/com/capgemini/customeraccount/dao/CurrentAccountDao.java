@@ -11,5 +11,5 @@ public interface CurrentAccountDao {
 
     AccountEntity createCurrentAccount(BigDecimal amount, String custId);
     Optional<AccountModel> getCurrentAccountEntity(String custId);
-    int updateCurrentAccount(BigDecimal amount, TransactionType transactionType, String custId);
+    int updateCurrentAccount(BigDecimal amount, TransactionType transactionType, String custId,String accountNumber);
 }

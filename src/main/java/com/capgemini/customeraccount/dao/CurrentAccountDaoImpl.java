@@ -68,14 +68,14 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
     }
 
     @Override
-    public int updateCurrentAccount(BigDecimal amount, TransactionType transactionType, String custId) {
+    public int updateCurrentAccount(BigDecimal amount, TransactionType transactionType, String custId,String accountNumber) {
         int updateStatus = - 1;
         try {
             if (transactionType == TransactionType.CREDIT) {
-                updateStatus = currentAcountRepo.updateByCustId(custId, amount, LocalDateTime.now());
+                updateStatus = currentAcountRepo.updateByCustId(custId, amount, LocalDateTime.now(),accountNumber);
             }
             else if (transactionType == TransactionType.DEBIT) {
-                updateStatus = currentAcountRepo.updateByCustIdDecrement(custId, amount, LocalDateTime.now()); }
+                updateStatus = currentAcountRepo.updateByCustIdDecrement(custId, amount, LocalDateTime.now(),accountNumber); }
         }
         catch (DataIntegrityViolationException dataIntegrityViolationException) {
             logger.error(dataIntegrityViolationException.getMessage());

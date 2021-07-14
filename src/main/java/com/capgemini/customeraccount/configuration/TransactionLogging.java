@@ -1,96 +1,61 @@
 package com.capgemini.customeraccount.configuration;
 
-import com.capgemini.customeraccount.model.TransactionModel;
+import com.capgemini.customeraccount.dao.TransactionDao;
+import com.capgemini.customeraccount.entity.AccountEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Aspect
 @Component
+@Slf4j
 public class TransactionLogging {
 
-    @Autowired
-    RestTemplate restTemplate;
-    @Autowired
-    AppConfig appConfig;
-    private  HttpHeaders headers;
-/*
+    private Logger logger = LoggerFactory.getLogger(TransactionLogging.class);
+    private String amount; private String transactionType;private String custId ;private String accountNumber ; private String description;
 
-    @Pointcut(value = "execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
-    public void createAccount(){
-        System.out.println("Transaction 1");
+    @Autowired
+    TransactionDao transactionDao;
+
+    @AfterThrowing(pointcut = "execution(* com.capgemini.customeraccount.dao..updateCurrentAccount(..) )",
+            throwing = "error")
+    public void afterFailTransaction(JoinPoint joinPoint, Throwable error){
+        initTransactionLogging(joinPoint);
 
     }
-*/
 
     @Before("execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
-    public Object transactionLogging(ProceedingJoinPoint pjp){
-        System.out.println("Transaction 2");
-
-
-        String methodName = pjp.getSignature().getName();
-        String className = pjp.getSignature().getName();
-        Object[] array = pjp.getArgs();
-        Object obj = null;
-
-
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = appConfig.getTransactioTypeURL();
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("transactioType", "CREDIT");
-
-        URI uri = UriComponentsBuilder.fromUriString(url)
-                .buildAndExpand(params)
-                .toUri();
-        uri = UriComponentsBuilder
-                .fromUri(uri)
-                .queryParam("amount", 10)
-                .queryParam("custId", "customer1")
-                .queryParam("description", "Testing")
-                .queryParam("transactioType", "CREDIT")
-                .queryParam("transactionTime", LocalDateTime.now())
-                .queryParam("accountNumber", "asdlkkalsd")
-
-                .build()
-                .toUri();
-        HttpEntity<String> request = new HttpEntity(headers);
-        restTemplate.exchange(uri , HttpMethod.POST,request, TransactionModel.class);
-
-
-
-        try {
-            obj = pjp.proceed();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-
-        return obj;
+    public void logBeforeUpdateAccount(JoinPoint joinPoint) { System.out.println("---"+joinPoint.getSignature());
+        initTransactionLogging(joinPoint);
     }
 
-    /**
-     * This is the method which I would like to execute
-     * after a selected method execution throws exception.
-     */
-    @AfterThrowing(PointCut = "execution(* com.tutorialspoint.Student.*(..))",
-            throwing = "error")
-    public void afterThrowingAdvice(JoinPoint jp, Throwable error){
-        System.out.println("Method Signature: "  + jp.getSignature());
-        System.out.println("Exception: "+error);
+    @AfterReturning(pointcut="execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.createCurrentAccount(..) )",returning = "accountEntitySaved")
+    public void  logBeforeCreateAccount( AccountEntity accountEntitySaved) {
+
+        logger.error(accountEntitySaved.getAccountEnum()+"  "+  accountEntitySaved.getCurrentAccountEntity().getAccountNumber()+"  "+        accountEntitySaved.getCurrentAccountEntity().getCustomerId());
+
     }
+    private void initTransactionLogging(JoinPoint joinPoint) {
+        Object[] signatureArgs = joinPoint.getArgs();
+
+        amount = String.valueOf(signatureArgs[0]) ;
+        transactionType = String.valueOf(signatureArgs[1]);
+        custId = String.valueOf(signatureArgs[2]);
+        accountNumber = String.valueOf(signatureArgs[3]);
+        transactionDao.logTransaction(amount, transactionType, custId, accountNumber, "Current account transaction");
+    }
+
+
+
+
+
+
 
 }

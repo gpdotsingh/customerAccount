@@ -2,6 +2,7 @@ package com.capgemini.customeraccount.enums;
 
 public enum ExceptionMessage {
 
+    TRY_AFTER_SOMETIME2("Transaction services are down please try after some time"),
     TRY_AFTER_SOMETIME("Your current balance is "),
     INSSUFFICIENT_BALANCE("Your current balance is "),
     INVALID_ACCOUNT_TYPE("Please correct the account type"),
