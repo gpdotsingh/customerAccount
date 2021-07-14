@@ -47,6 +47,7 @@ public class TransactionLogging {
                 , accountEntitySaved.getCurrentAccountEntity().getAccountNumber()
                 , "Current account transaction");
     }
+
     private void initTransactionLogging(JoinPoint joinPoint) {
         Object[] signatureArgs = joinPoint.getArgs();
 

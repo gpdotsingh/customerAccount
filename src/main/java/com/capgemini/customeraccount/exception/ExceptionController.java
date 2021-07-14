@@ -31,7 +31,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(ExceptionMessageEnum.EXCEPTION_TIME.name(), LocalDateTime.now());
         body.put(ExceptionMessageEnum.INVALID_ACCOUNT_TYPE.name(), ex.getLocalizedMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.EXPECTATION_FAILED);
     }
 
     @ExceptionHandler(GenericException.class)

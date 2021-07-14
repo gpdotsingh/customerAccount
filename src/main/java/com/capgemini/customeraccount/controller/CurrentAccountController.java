@@ -34,19 +34,21 @@ public class CurrentAccountController {
         Optional<AccountModel> accountModel = accountTransactionServices.verifyAccount(custId, accountType);
 
         if(accountModel.isPresent())
-            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionTypeEnum,accountType,amount,accountModel), HttpStatus.OK);
+            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionTypeEnum,accountType,amount,accountModel), HttpStatus.CREATED);
 
-        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum), HttpStatus.CREATED);
+        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum), HttpStatus.OK);
     }
 
+    /**
+     *  Responsible to create account of existing customer
+     * @param amount
+     * @param transactionTypeEnum
+     * @param accountType
+     * @param custId
+     * @return
+     */
     @PostMapping("{accountType}/{custId}")
     public ResponseEntity<AccountModel> createAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionTypeEnum, @PathVariable AccountEnum accountType, @PathVariable String custId)
-    {
-        return  new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum),HttpStatus.CREATED);
-    }
-
-    @GetMapping("{accountType}/{custId}")
-    public ResponseEntity<AccountModel> delete(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionTypeEnum, @PathVariable AccountEnum accountType, @PathVariable String custId)
     {
         return  new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum),HttpStatus.CREATED);
     }
