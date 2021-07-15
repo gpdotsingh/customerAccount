@@ -1,9 +1,13 @@
 package com.capgemini.customeraccount.controller;
 
+import com.capgemini.customeraccount.controller.common.DataSetUp;
+import com.capgemini.customeraccount.entity.CustomerEntity;
 import com.capgemini.customeraccount.enums.AccountEnum;
+import com.capgemini.customeraccount.repository.CustomerRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -11,6 +15,8 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,6 +26,9 @@ public class AccountControllerITTest {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    CustomerRepo customerRepo;
 
     private TestRestTemplate restTemplate;
     private static HttpHeaders headers;
@@ -33,9 +42,9 @@ public class AccountControllerITTest {
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         customerControllerURL.append("http://localhost:" + port + "/api/v1/accounts/");
-
+        DataSetUp dataSetUp = new DataSetUp();
+        dataSetUp.datasetUp(customerRepo);
     }
-
 
     @Test
     public void createAccountHappyFlow() {
@@ -76,7 +85,7 @@ public class AccountControllerITTest {
         customerControllerURL.append("?");
         customerControllerURL.append("amount=33&transactionTypeEnum=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
-        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.OK);
+        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.CREATED);
     }
 
     @Test

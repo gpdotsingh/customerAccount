@@ -1,7 +1,10 @@
 package com.capgemini.customeraccount.controller;
 
+import com.capgemini.customeraccount.controller.common.DataSetUp;
+import com.capgemini.customeraccount.repository.CustomerRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -17,7 +20,8 @@ class CustomerControllerITTest {
 
     @LocalServerPort
     private int port;
-
+    @Autowired
+    CustomerRepo customerRepo;
     private TestRestTemplate restTemplate;
     private static HttpHeaders headers;
     private StringBuilder customerControllerURL = new StringBuilder();
@@ -27,6 +31,8 @@ class CustomerControllerITTest {
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         customerControllerURL.append("http://localhost:" + port + "/api/v1/customers/");
+        DataSetUp dataSetUp = new DataSetUp();
+        dataSetUp.datasetUp(customerRepo);
     }
 
     @Test

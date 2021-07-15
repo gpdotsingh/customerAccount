@@ -34,9 +34,9 @@ public class CurrentAccountController {
         Optional<AccountModel> accountModel = accountTransactionServices.verifyAccount(custId, accountType);
 
         if(accountModel.isPresent())
-            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionTypeEnum,accountType,amount,accountModel), HttpStatus.CREATED);
+            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionTypeEnum,accountType,amount,accountModel), HttpStatus.OK);
 
-        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum), HttpStatus.OK);
+        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum), HttpStatus.CREATED);
     }
 
     /**
