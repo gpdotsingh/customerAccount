@@ -41,6 +41,14 @@ End user can send request perform below steps to get meaningful result.
 *
 /api/v1/transaction/{accountNumber}
 
+# Steps to open project
+    Clone this repo and start application by following below steps
+### Build
+    mvn clean install
+### Run integration test
+    mvn clean verify
+### Run
+    mvn spring-boot:run
 
 
 #### Note #### 
