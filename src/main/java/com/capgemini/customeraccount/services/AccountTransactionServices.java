@@ -4,8 +4,6 @@ import com.capgemini.customeraccount.enums.AccountEnum;
 import com.capgemini.customeraccount.enums.TransactionTypeEnum;
 import com.capgemini.customeraccount.model.AccountModel;
 import com.capgemini.customeraccount.model.TransactionPageModel;
-
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.Optional;
 

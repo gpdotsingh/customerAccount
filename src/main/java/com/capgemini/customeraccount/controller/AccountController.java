@@ -14,14 +14,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
-public class CurrentAccountController {
+public class AccountController {
 
     @Autowired
     AccountTransactionServices accountTransactionServices;
 
     /**
-     * Check account
-     *  if exists update it else create it
+     * Perform account transaction, check account  if exists update it else create new account for existing customer
      * @param amount
      * @param transactionType
      * @param accountType
@@ -33,14 +32,14 @@ public class CurrentAccountController {
     {
         Optional<AccountModel> accountModel = accountTransactionServices.verifyAccount(custId, accountType);
 
-        if(accountModel.isPresent())
-            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionType,accountType,amount,accountModel.get()), HttpStatus.OK);
-
+        if(accountModel.isPresent()) {
+            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionType, accountType, amount, accountModel.get()), HttpStatus.OK);
+        }
         return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionType), HttpStatus.CREATED);
     }
 
     /**
-     *  Responsible to create account of existing customer
+     *  Responsible to create new account of existing customer
      * @param amount
      * @param transactionType
      * @param accountType

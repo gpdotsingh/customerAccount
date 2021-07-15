@@ -6,7 +6,6 @@ import com.capgemini.customeraccount.enums.AccountEnum;
 import com.capgemini.customeraccount.enums.ExceptionMessageEnum;
 import com.capgemini.customeraccount.enums.TransactionTypeEnum;
 import com.capgemini.customeraccount.exception.AccountException;
-import com.capgemini.customeraccount.exception.GenericException;
 import com.capgemini.customeraccount.model.AccountModel;
 import com.capgemini.customeraccount.model.CustomerModel;
 import com.capgemini.customeraccount.model.TransactionPageModel;
@@ -24,7 +23,7 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
     @Autowired
     TransactionDao transactionDao;
     @Autowired
-    CustomerServicesImpl customerServices;
+    CustomerServices customerServices;
 
     @Override
     public AccountModel createAccount(String custId, AccountEnum accountType, BigDecimal amount,TransactionTypeEnum transactionTypeEnum) {
@@ -33,14 +32,15 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
                 throw new AccountException(ExceptionMessageEnum.INVALID_TRANSACTION_TYPE.name());
         }
 
-        AccountModel accountModel = new AccountModel();
+        customerServices.getCustomerByCustomerId(custId);
 
         switch (accountType) {
             case CURRENT:
                 currentAccountDao.createCurrentAccount(amount, custId);
-                accountModel = currentAccountDao.getCurrentAccountEntity(custId).orElseThrow(()->new AccountException(ExceptionMessageEnum.INVALID_ACCOUNT_TYPE.name()));
+                return currentAccountDao.getCurrentAccountEntity(custId).orElseThrow(()->new AccountException(ExceptionMessageEnum.TRY_AFTER_SOMETIME.name()));
+            default:
+                throw new AccountException(ExceptionMessageEnum.INVALID_ACCOUNT_TYPE.name());
         }
-        return accountModel;
     }
 
     /**
@@ -53,9 +53,14 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
     @Override
     public AccountModel updateAccount(String custId, TransactionTypeEnum transactionTypeEnum, AccountEnum accountType, BigDecimal amount,   AccountModel currentAccountOptional) {
 
-            currentAccountDao.updateCurrentAccount(amount, transactionTypeEnum, custId, currentAccountOptional.getAccountNumber());
-            return currentAccountDao.getCurrentAccountEntity(custId).orElseThrow(()->new AccountException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name()));
-    }
+        switch (accountType) {
+            case CURRENT:
+                currentAccountDao.updateCurrentAccount(amount, transactionTypeEnum, custId, currentAccountOptional.getAccountNumber());
+                return currentAccountDao.getCurrentAccountEntity(custId).orElseThrow(() -> new AccountException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name()));
+            default:
+                throw new AccountException(ExceptionMessageEnum.INVALID_ACCOUNT_TYPE.name());
+        }
+        }
 
     @Override
     public TransactionPageModel getAccountTransaction(int pageNo, int pageSize, String accountNumber) {

@@ -48,7 +48,7 @@ public class AccountControllerITTest {
 
     @Test
     public void createAccountHappyFlow() {
-        setURL("/customer4", "amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer4", "amount=33&transactionType=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.CREATED);
     }
@@ -56,15 +56,15 @@ public class AccountControllerITTest {
 
     @Test
     public void createAccountNoCustomerFlow() {
-        setURL("/customer490", "amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer490", "amount=33&transactionType=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
-        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.PAYMENT_REQUIRED);
+        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.NOT_FOUND);
     }
 
 
     @Test
     public void updateCreateAccountHappyFlow() {
-        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer5", "amount=33&transactionType=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.OK);
@@ -72,32 +72,32 @@ public class AccountControllerITTest {
 
     @Test
     public void insufficientAccountHappyFlow() {
-        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer5", "amount=33&transactionType=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class);
-        setURL("/customer5", "amount=63&transactionTypeEnum=DEBIT  ");
+        setURL("/customer5", "amount=63&transactionType=DEBIT  ");
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void debitAccountHappyFlow() {
-        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer5", "amount=33&transactionType=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class);
-        setURL("/customer5", "amount=31&transactionTypeEnum=DEBIT  ");
+        setURL("/customer5", "amount=31&transactionType=DEBIT  ");
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void updateAccountHappyFlow() {
-        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer5", "amount=33&transactionType=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.CREATED);
     }
 
     @Test
     public void debitATCreateNotAllowed() {
-        setURL("/customer5", "amount=33&transactionTypeEnum=DEBIT");
+        setURL("/customer5", "amount=33&transactionType=DEBIT");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.EXPECTATION_FAILED);
     }

@@ -35,7 +35,16 @@ public class CurrentAccountEntity {
     @JoinColumn(name = "account_id")
     private AccountEntity accountEntity;
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = "curraccount"+this.customerId ;
+
+
+    public CurrentAccountEntity(@NonNull String customerId,  BigDecimal amount, LocalDateTime accountCreationTime, LocalDateTime lastUpdatedTime, AccountEntity accountEntity) {
+        this.customerId = customerId;
+        this.accountNumber = "curraccount"+customerId;
+        this.amount = amount;
+        this.accountCreationTime = accountCreationTime;
+        this.lastUpdatedTime = lastUpdatedTime;
+        this.accountEntity = accountEntity;
     }
+
+
 }

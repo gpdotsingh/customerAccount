@@ -13,6 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/***
+ * This class will provide feature to call transaction services by using spring AOP feature
+ *
+ * Will call transaction services on creation of account, update of account also send transaction
+ * when any exception occur during account operation
+ */
 @Aspect
 @Component
 @Slf4j
@@ -21,18 +27,30 @@ public class TransactionLogging {
     @Autowired
     TransactionDao transactionDao;
 
-    @AfterThrowing(pointcut = "execution(* com.capgemini.customeraccount.dao..updateCurrentAccount(..) )",
+    /**
+     * Call transaction to register failed transaction
+     * @param joinPoint
+     * @param error
+     */
+    @AfterThrowing(pointcut = "execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )",
             throwing = "error")
     public void afterFailTransaction(JoinPoint joinPoint, Throwable error){
         initTransactionLogging(joinPoint);
-
     }
 
+    /**
+     * Call transaction services on account update
+     * @param joinPoint
+     */
     @AfterReturning("execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.updateCurrentAccount(..) )")
     public void logBeforeUpdateAccount(JoinPoint joinPoint) {
         initTransactionLogging(joinPoint);
     }
 
+    /**
+     * Call transaction services after account creation
+     * @param accountEntitySaved
+     */
     @AfterReturning(pointcut="execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.createCurrentAccount(..) )",returning = "accountEntitySaved")
     public void  logAfterCreateAccount( AccountEntity accountEntitySaved) {
 
@@ -45,6 +63,10 @@ public class TransactionLogging {
                 , "Current account transaction");
     }
 
+    /**
+     *Call transaction services
+     * @param joinPoint
+     */
     private void initTransactionLogging(JoinPoint joinPoint) {
         Object[] signatureArgs = joinPoint.getArgs();
 

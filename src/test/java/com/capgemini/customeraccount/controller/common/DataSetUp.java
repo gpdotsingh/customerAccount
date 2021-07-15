@@ -10,6 +10,7 @@ public class DataSetUp {
 
 
     public void datasetUp(CustomerRepo customerRepo) {
+
         customerRepo.deleteAll();
 
         CustomerEntity customerEntity = new CustomerEntity();

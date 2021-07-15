@@ -40,9 +40,15 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
     @Autowired
     AccountTransactionDto accountTransactionDto;
 
+    /**
+     *
+     * @param amount
+     * @param custId
+     * @return
+     */
     @Override
     public AccountEntity createCurrentAccount(BigDecimal amount, String custId) {
-        AccountEntity accountEntitySaved = null;
+        AccountEntity accountEntitySaved;
         try {
             // Get customer
             Optional<CustomerEntity> customer = customerRepo.findByCustomerIdIgnoreCase(custId);
@@ -51,14 +57,9 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
             accountEntity.setAccountEnum(AccountEnum.CURRENT);
             accountEntity.setCustomer(customer.orElseThrow( ()->new GenericException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name())));
             // Create current account
-            CurrentAccountEntity currentAccountEntity = new CurrentAccountEntity();
-            currentAccountEntity.setCustomerId(custId);
-            currentAccountEntity.setLastUpdatedTime(LocalDateTime.now());
-            currentAccountEntity.setAccountNumber(custId.trim().toUpperCase(Locale.ROOT));
-            currentAccountEntity.setAccountEntity(accountEntity);
-            currentAccountEntity.setAmount(amount);
-            currentAccountEntity.setAccountCreationTime(LocalDateTime.now());
-
+            CurrentAccountEntity currentAccountEntity =
+                    new CurrentAccountEntity(custId,amount,LocalDateTime.now(),LocalDateTime.now(),accountEntity);
+            //
             accountEntity.setCurrentAccountEntity(currentAccountEntity);
             accountEntitySaved = accountRepo.save(accountEntity);
         } catch (Exception e) {
