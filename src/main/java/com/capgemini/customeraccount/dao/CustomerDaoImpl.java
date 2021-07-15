@@ -2,6 +2,8 @@ package com.capgemini.customeraccount.dao;
 
 import com.capgemini.customeraccount.entity.CustomerEntity;
 import com.capgemini.customeraccount.enums.AccountEnum;
+import com.capgemini.customeraccount.enums.ExceptionMessageEnum;
+import com.capgemini.customeraccount.exception.AccountException;
 import com.capgemini.customeraccount.model.AccountModel;
 import com.capgemini.customeraccount.model.CustomerModel;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ public class CustomerDaoImpl implements CustomerDao{
      */
     @Override
     public CustomerModel customerEntityToModel(Optional<CustomerEntity> customerEntity) {
+
         List<AccountModel> accounts = customerEntity.orElse(new CustomerEntity())
                 .getAccountEntity()
                 .stream()
@@ -34,7 +37,9 @@ public class CustomerDaoImpl implements CustomerDao{
                         }
                 ).collect(Collectors.toList());
 
-        return new CustomerModel(customerEntity.get().getCustomerId(), customerEntity.get().getFirstName(), customerEntity.get().getLastName(), customerEntity.get().getMiddleName(),accounts);
+        String customerId = customerEntity.orElseThrow(() -> new AccountException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name())).getCustomerId();
+
+        return new CustomerModel(customerId, customerEntity.get().getFirstName(), customerEntity.get().getLastName(), customerEntity.get().getMiddleName(),accounts);
 
     }
 }

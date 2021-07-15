@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.ConnectException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -105,7 +104,8 @@ public class TransactionDaoImpl implements TransactionDao {
         }
         catch (Exception e)
         {
-            logger.error("Do something",e.getMessage());
+            logger.error("Store logs");
+            logger.error(e.getMessage());
         }
     }
 

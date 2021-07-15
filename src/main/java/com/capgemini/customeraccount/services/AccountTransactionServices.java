@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface AccountTransactionServices {
 
     AccountModel createAccount(String custId, AccountEnum accountType,BigDecimal amount,TransactionTypeEnum transactionTypeEnum);
-    AccountModel updateAccount(String custId, TransactionTypeEnum transactionTypeEnum, AccountEnum accountType, BigDecimal amount, Optional<AccountModel> currentAccountOptional);
+    AccountModel updateAccount(String custId, TransactionTypeEnum transactionTypeEnum, AccountEnum accountType, BigDecimal amount,AccountModel currentAccountOptional);
     TransactionPageModel getAccountTransaction(int pageNo, int pageSize, String accountNumber);
     Optional<AccountModel> verifyAccount(String custId,AccountEnum accountType);
 }

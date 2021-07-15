@@ -29,16 +29,16 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
     @Override
     public AccountModel createAccount(String custId, AccountEnum accountType, BigDecimal amount,TransactionTypeEnum transactionTypeEnum) {
 
-        switch (transactionTypeEnum) {
-            case DEBIT:
+        if (transactionTypeEnum == TransactionTypeEnum.DEBIT) {
                 throw new AccountException(ExceptionMessageEnum.INVALID_TRANSACTION_TYPE.name());
         }
-                AccountModel accountModel = new AccountModel();
+
+        AccountModel accountModel = new AccountModel();
 
         switch (accountType) {
             case CURRENT:
                 currentAccountDao.createCurrentAccount(amount, custId);
-                accountModel = currentAccountDao.getCurrentAccountEntity(custId).get();
+                accountModel = currentAccountDao.getCurrentAccountEntity(custId).orElseThrow(()->new AccountException(ExceptionMessageEnum.INVALID_ACCOUNT_TYPE.name()));
         }
         return accountModel;
     }
@@ -51,10 +51,10 @@ public class AccountTransactionServicesImpl implements AccountTransactionService
      * @return
      */
     @Override
-    public AccountModel updateAccount(String custId, TransactionTypeEnum transactionTypeEnum, AccountEnum accountType, BigDecimal amount,   Optional<AccountModel> currentAccountOptional) {
+    public AccountModel updateAccount(String custId, TransactionTypeEnum transactionTypeEnum, AccountEnum accountType, BigDecimal amount,   AccountModel currentAccountOptional) {
 
-            currentAccountDao.updateCurrentAccount(amount, transactionTypeEnum, custId, currentAccountOptional.get().getAccountNumber());
-            return currentAccountDao.getCurrentAccountEntity(custId).get();
+            currentAccountDao.updateCurrentAccount(amount, transactionTypeEnum, custId, currentAccountOptional.getAccountNumber());
+            return currentAccountDao.getCurrentAccountEntity(custId).orElseThrow(()->new AccountException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name()));
     }
 
     @Override

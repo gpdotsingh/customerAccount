@@ -23,34 +23,34 @@ public class CurrentAccountController {
      * Check account
      *  if exists update it else create it
      * @param amount
-     * @param transactionTypeEnum
+     * @param transactionType
      * @param accountType
      * @param custId
      * @return
      */
     @PatchMapping("{accountType}/{custId}")
-    public ResponseEntity<AccountModel> updateAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionTypeEnum, @PathVariable AccountEnum accountType, @PathVariable String custId)
+    public ResponseEntity<AccountModel> updateAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionType, @PathVariable AccountEnum accountType, @PathVariable String custId)
     {
         Optional<AccountModel> accountModel = accountTransactionServices.verifyAccount(custId, accountType);
 
         if(accountModel.isPresent())
-            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionTypeEnum,accountType,amount,accountModel), HttpStatus.OK);
+            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionType,accountType,amount,accountModel.get()), HttpStatus.OK);
 
-        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum), HttpStatus.CREATED);
+        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionType), HttpStatus.CREATED);
     }
 
     /**
      *  Responsible to create account of existing customer
      * @param amount
-     * @param transactionTypeEnum
+     * @param transactionType
      * @param accountType
      * @param custId
      * @return
      */
     @PostMapping("{accountType}/{custId}")
-    public ResponseEntity<AccountModel> createAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionTypeEnum, @PathVariable AccountEnum accountType, @PathVariable String custId)
+    public ResponseEntity<AccountModel> createAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionType, @PathVariable AccountEnum accountType, @PathVariable String custId)
     {
-        return  new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionTypeEnum),HttpStatus.CREATED);
+        return  new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionType),HttpStatus.CREATED);
     }
 
 }

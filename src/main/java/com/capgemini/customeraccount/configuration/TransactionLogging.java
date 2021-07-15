@@ -18,8 +18,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TransactionLogging {
 
-    private Logger logger = LoggerFactory.getLogger(TransactionLogging.class);
-
     @Autowired
     TransactionDao transactionDao;
 
@@ -38,7 +36,6 @@ public class TransactionLogging {
     @AfterReturning(pointcut="execution(* com.capgemini.customeraccount.dao.CurrentAccountDaoImpl.createCurrentAccount(..) )",returning = "accountEntitySaved")
     public void  logAfterCreateAccount( AccountEntity accountEntitySaved) {
 
-        logger.error(String.format("Account type %s, accountNumber:: %s, customerId:: %s, amount :: ",accountEntitySaved.getAccountEnum(),accountEntitySaved.getCurrentAccountEntity().getAccountNumber(), accountEntitySaved.getCurrentAccountEntity().getCustomerId()));
         transactionDao.logTransaction(
                 String.valueOf(
                         accountEntitySaved.getCurrentAccountEntity().getAmount())

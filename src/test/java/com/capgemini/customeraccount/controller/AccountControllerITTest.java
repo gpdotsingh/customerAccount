@@ -48,10 +48,7 @@ public class AccountControllerITTest {
 
     @Test
     public void createAccountHappyFlow() {
-        customerControllerURL.append(AccountEnum.CURRENT);
-        customerControllerURL.append("/customer4");
-        customerControllerURL.append("?");
-        customerControllerURL.append("amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer4", "amount=33&transactionTypeEnum=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.CREATED);
     }
@@ -59,10 +56,7 @@ public class AccountControllerITTest {
 
     @Test
     public void createAccountNoCustomerFlow() {
-        customerControllerURL.append(AccountEnum.CURRENT);
-        customerControllerURL.append("/customer490");
-        customerControllerURL.append("?");
-        customerControllerURL.append("amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer490", "amount=33&transactionTypeEnum=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.PAYMENT_REQUIRED);
     }
@@ -70,41 +64,49 @@ public class AccountControllerITTest {
 
     @Test
     public void updateCreateAccountHappyFlow() {
-        customerControllerURL.append(AccountEnum.CURRENT);
-        customerControllerURL.append("/customer5");
-        customerControllerURL.append("?");
-        customerControllerURL.append("amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
-        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.CREATED);
+        this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class);
+        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.OK);
+    }
+
+    @Test
+    public void insufficientAccountHappyFlow() {
+        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
+        HttpEntity<String> request = new HttpEntity<>( headers);
+        this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class);
+        setURL("/customer5", "amount=63&transactionTypeEnum=DEBIT  ");
+        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void debitAccountHappyFlow() {
+        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
+        HttpEntity<String> request = new HttpEntity<>( headers);
+        this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class);
+        setURL("/customer5", "amount=31&transactionTypeEnum=DEBIT  ");
+        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void updateAccountHappyFlow() {
-        customerControllerURL.append(AccountEnum.CURRENT);
-        customerControllerURL.append("/customer5");
-        customerControllerURL.append("?");
-        customerControllerURL.append("amount=33&transactionTypeEnum=CREDIT  ");
+        setURL("/customer5", "amount=33&transactionTypeEnum=CREDIT  ");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.CREATED);
     }
 
     @Test
     public void debitATCreateNotAllowed() {
-        customerControllerURL.append(AccountEnum.CURRENT);
-        customerControllerURL.append("/customer5");
-        customerControllerURL.append("?");
-        customerControllerURL.append("amount=33&transactionTypeEnum=DEBIT");
+        setURL("/customer5", "amount=33&transactionTypeEnum=DEBIT");
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.POST, request, String.class).getStatusCode(),HttpStatus.EXPECTATION_FAILED);
     }
 
-    @Test
-    public void debitInsufficientAmount() {
+    public void setURL(String s, String s2) {
         customerControllerURL.append(AccountEnum.CURRENT);
-        customerControllerURL.append("/customer5");
+        customerControllerURL.append(s);
         customerControllerURL.append("?");
-        customerControllerURL.append("amount=3354&transactionTypeEnum=DEBIT  ");
-        HttpEntity<String> request = new HttpEntity<>( headers);
-        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.PATCH, request, String.class).getStatusCode(),HttpStatus.EXPECTATION_FAILED);
+        customerControllerURL.append(s2);
     }
+
 }
