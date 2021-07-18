@@ -21,8 +21,10 @@ public class CustomerController {
      * @return
      */
     @GetMapping
-    public Page<CustomerModel> cutomer(@RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
-                                        @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
+    public Page<CustomerModel> cutomer(@RequestParam(name = "pageNo", required = false,
+            defaultValue = "0") int pageNo,
+                                        @RequestParam(name = "pageSize", required = false,
+                                                defaultValue = "10") int pageSize){
         return customerservices.getCustomers(pageNo,pageSize);
     }
 
@@ -32,7 +34,7 @@ public class CustomerController {
      * @return
      */
     @GetMapping("{customerId}")
-    public CustomerModel cutomerInfo(@PathVariable(name = "customerId", required = true) String customerId){
+    public CustomerModel cutomerInfo(@PathVariable(name = "customerId") String customerId){
         return customerservices.getCustomerByCustomerId(customerId);
     }
 }

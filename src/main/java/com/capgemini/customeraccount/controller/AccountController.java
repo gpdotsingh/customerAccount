@@ -1,7 +1,5 @@
 package com.capgemini.customeraccount.controller;
 
-import com.capgemini.customeraccount.enums.AccountEnum;
-import com.capgemini.customeraccount.enums.TransactionTypeEnum;
 import com.capgemini.customeraccount.model.AccountModel;
 import com.capgemini.customeraccount.services.AccountTransactionServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,29 +25,26 @@ public class AccountController {
      * @param custId
      * @return
      */
-    @PatchMapping("{accountType}/{custId}")
-    public ResponseEntity<AccountModel> updateAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionType, @PathVariable AccountEnum accountType, @PathVariable String custId)
+    @PutMapping("{accountType}/{custId}")
+    public ResponseEntity<AccountModel> updateAccount(@RequestParam(required = false, defaultValue = "0") BigDecimal amount
+            , @RequestParam String transactionType
+            , @PathVariable String accountType
+            , @PathVariable String custId)
     {
-        Optional<AccountModel> accountModel = accountTransactionServices.verifyAccount(custId, accountType);
+        // Check if customer exists return account model else throw exception
+        Optional<AccountModel> accountModel = accountTransactionServices.verifyAccount(custId.trim(), accountType.trim().toUpperCase());
 
         if(accountModel.isPresent()) {
-            return new ResponseEntity(accountTransactionServices.updateAccount(custId, transactionType, accountType, amount, accountModel.get()), HttpStatus.OK);
+            return new ResponseEntity(accountTransactionServices.updateAccount(custId.trim(), transactionType.trim().toUpperCase()
+                    , accountType.trim().toUpperCase()
+                    , amount
+                    , accountModel.get()), HttpStatus.OK);
         }
-        return new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionType), HttpStatus.CREATED);
+        return new ResponseEntity(accountTransactionServices.createAccount(custId.trim().toUpperCase()
+                ,accountType.trim().toUpperCase()
+                ,amount
+                ,transactionType.trim().toUpperCase()), HttpStatus.CREATED);
     }
 
-    /**
-     *  Responsible to create new account of existing customer
-     * @param amount
-     * @param transactionType
-     * @param accountType
-     * @param custId
-     * @return
-     */
-    @PostMapping("{accountType}/{custId}")
-    public ResponseEntity<AccountModel> createAccount(@RequestParam BigDecimal amount, @RequestParam TransactionTypeEnum transactionType, @PathVariable AccountEnum accountType, @PathVariable String custId)
-    {
-        return  new ResponseEntity(accountTransactionServices.createAccount(custId,accountType,amount,transactionType),HttpStatus.CREATED);
-    }
 
 }

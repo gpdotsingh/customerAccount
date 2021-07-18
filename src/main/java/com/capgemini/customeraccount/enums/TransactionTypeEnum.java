@@ -10,4 +10,6 @@ public enum TransactionTypeEnum {
     TransactionTypeEnum(String type) {
         this.type = type;
     }
+
+
 }

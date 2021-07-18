@@ -18,7 +18,6 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,12 +51,13 @@ public class TransactionControllerITTest {
     @Test
     public void getTransactions(){
         ResponseEntity mocResponse = new ResponseEntity("Some json string", HttpStatus.OK);
-        given(appConfig.getTransactionUrl()).willReturn("Workbook4.csv");
 
        when(mockRestTemplate.getForEntity(anyString(), any()))
                .thenReturn(mocResponse);
 
-        assertEquals(this.testRestTemplate.exchange(customerControllerURL.toString(), HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode(),HttpStatus.PAYMENT_REQUIRED);;
+        assertEquals(this.testRestTemplate.exchange(customerControllerURL.toString()
+                , HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode()
+                ,HttpStatus.NOT_FOUND);;
 
 
     }

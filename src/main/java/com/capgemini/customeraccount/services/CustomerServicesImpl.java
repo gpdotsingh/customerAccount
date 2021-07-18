@@ -28,13 +28,15 @@ public class CustomerServicesImpl implements CustomerServices {
 
     @Override
     public Page<CustomerModel> getCustomers(int pageNo, int pageSize) {
-        Page<CustomerEntity> customerEntityPage = customerRepo.findAll(PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, "customerId")));
+        Page<CustomerEntity> customerEntityPage = customerRepo
+                .findAll(PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, "customerId")));
         return customerDto.entityToModel(customerEntityPage);
     }
     @Override
     public CustomerModel getCustomerByCustomerId(String customerId) {
 
-        Optional<CustomerEntity> customerEntity = customerRepo.findByCustomerIdIgnoreCase(customerId.trim().toLowerCase(Locale.ROOT));
+        Optional<CustomerEntity> customerEntity = customerRepo
+                .findByCustomerIdIgnoreCase(customerId.trim().toLowerCase(Locale.ROOT));
         if (customerEntity.isPresent()) {
             return customerDao.customerEntityToModel(customerEntity);
         }

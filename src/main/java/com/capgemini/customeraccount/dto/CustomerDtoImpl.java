@@ -11,7 +11,10 @@ public class CustomerDtoImpl implements CustomerDto{
     @Override
     public Page<CustomerModel> entityToModel(Page<CustomerEntity> customerEntity) {
         return  customerEntity.map(customerFromDB ->
-             new CustomerModel(customerFromDB.getCustomerId(),customerFromDB.getFirstName(),customerFromDB.getLastName(),customerFromDB.getMiddleName())
+             new CustomerModel(customerFromDB.getCustomerId()
+                     ,customerFromDB.getFirstName()
+                     ,customerFromDB.getLastName()
+                     ,customerFromDB.getMiddleName())
          );
     }
 

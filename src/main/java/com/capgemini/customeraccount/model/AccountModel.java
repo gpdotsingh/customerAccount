@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,11 +16,14 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AccountModel {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("account_Number")
     private String accountNumber;
     @JsonProperty("account_type")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private AccountEnum accountEnum;
     @JsonProperty("balance_amount")
     @JsonInclude(JsonInclude.Include.NON_NULL)

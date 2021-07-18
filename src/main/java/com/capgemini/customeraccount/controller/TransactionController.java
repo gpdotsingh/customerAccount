@@ -12,11 +12,11 @@ public class TransactionController {
     @Autowired
     AccountTransactionServices accountTransactionServices;
 
-    @GetMapping("/{accountNumber}")
+    @GetMapping("/{accountType}/{custId}")
     public TransactionPageModel getAccountTransactions(@RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
-                                                       @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize, @PathVariable String accountNumber)
+                                                       @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize, @PathVariable String accountType, @PathVariable String custId)
     {
-        return accountTransactionServices.getAccountTransaction(pageNo,pageSize,accountNumber);
+        return accountTransactionServices.getAccountTransaction(pageNo,pageSize,custId.trim(),accountType.trim().toUpperCase());
     }
 
 }

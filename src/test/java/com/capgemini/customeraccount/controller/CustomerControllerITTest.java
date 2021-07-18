@@ -39,7 +39,8 @@ class CustomerControllerITTest {
     public void getCustomerPageHappyFlow()
     {
         HttpEntity<String> request = new HttpEntity<>(headers);
-        assertTrue(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode()== HttpStatus.OK);
+        assertTrue(this.restTemplate.exchange(customerControllerURL.toString()
+                , HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode()== HttpStatus.OK);
 
     }
 
@@ -48,7 +49,8 @@ class CustomerControllerITTest {
     {
         customerControllerURL.append("/customer1");
         String customers = this.restTemplate.getForObject(customerControllerURL.toString(), String.class);
-        assertTrue(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode()== HttpStatus.OK);
+        assertTrue(this.restTemplate.exchange(customerControllerURL.toString()
+                , HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode()== HttpStatus.OK);
     }
 
     @Test
@@ -56,6 +58,7 @@ class CustomerControllerITTest {
     {
         customerControllerURL.append("/customer91");
         String customers = this.restTemplate.getForObject(customerControllerURL.toString(), String.class);
-        assertEquals(this.restTemplate.exchange(customerControllerURL.toString(), HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(this.restTemplate.exchange(customerControllerURL.toString()
+                , HttpMethod.GET,new HttpEntity<>(headers),String.class).getStatusCode(), HttpStatus.NOT_FOUND);
     }
 }

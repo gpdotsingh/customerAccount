@@ -10,6 +10,10 @@ import java.util.Optional;
 public interface CurrentAccountDao {
 
     AccountEntity createCurrentAccount(BigDecimal amount, String custId);
+
     Optional<AccountModel> getCurrentAccountEntity(String custId);
-    int updateCurrentAccount(BigDecimal amount, TransactionTypeEnum transactionTypeEnum, String custId, String accountNumber);
+
+    int updateCurrentAccount(BigDecimal amount,
+                             TransactionTypeEnum transactionTypeEnum,
+                              String custId, String accountNumber);
 }

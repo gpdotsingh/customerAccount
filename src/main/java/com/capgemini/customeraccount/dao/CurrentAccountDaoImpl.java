@@ -41,27 +41,33 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
     AccountTransactionDto accountTransactionDto;
 
     /**
-     *
      * @param amount
      * @param custId
      * @return
      */
     @Override
     public AccountEntity createCurrentAccount(BigDecimal amount, String custId) {
+
+        Optional<CustomerEntity> customer = customerRepo.findByCustomerIdIgnoreCase(custId);
+        CustomerEntity customer1 = customer
+                .orElseThrow(() -> new GenericException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name()));
+
         AccountEntity accountEntitySaved;
+
         try {
             // Get customer
-            Optional<CustomerEntity> customer = customerRepo.findByCustomerIdIgnoreCase(custId);
             // Create account
             AccountEntity accountEntity = new AccountEntity();
             accountEntity.setAccountEnum(AccountEnum.CURRENT);
-            accountEntity.setCustomer(customer.orElseThrow( ()->new GenericException(ExceptionMessageEnum.CUSTOMER_NOT_FOUND.name())));
+            accountEntity.setCustomer(customer1);
             // Create current account
             CurrentAccountEntity currentAccountEntity =
-                    new CurrentAccountEntity(custId,amount,LocalDateTime.now(),LocalDateTime.now(),accountEntity);
+                    new CurrentAccountEntity(custId, amount, LocalDateTime.now()
+                            , LocalDateTime.now(), accountEntity);
             //
             accountEntity.setCurrentAccountEntity(currentAccountEntity);
             accountEntitySaved = accountRepo.save(accountEntity);
+
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new GenericException(ExceptionMessageEnum.KINDLY_VERIFY_CUSTOMER.toString());
@@ -70,21 +76,22 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
     }
 
     @Override
-    public int updateCurrentAccount(BigDecimal amount, TransactionTypeEnum transactionTypeEnum, String custId, String accountNumber) {
-        int updateStatus = - 1;
+    public int updateCurrentAccount(BigDecimal amount
+            , TransactionTypeEnum transactionTypeEnum
+            , String custId, String accountNumber) {
+        int updateStatus = -1;
         try {
             if (transactionTypeEnum == TransactionTypeEnum.CREDIT) {
-                updateStatus = currentAcountRepo.updateByCustId(custId.trim().toLowerCase(Locale.ROOT), amount, LocalDateTime.now(),accountNumber);
+                updateStatus = currentAcountRepo.updateByCustId(custId.trim()
+                        .toLowerCase(Locale.ROOT), amount, LocalDateTime.now(), accountNumber);
+            } else if (transactionTypeEnum == TransactionTypeEnum.DEBIT) {
+                updateStatus = currentAcountRepo.updateByCustIdDecrement(custId.trim()
+                        .toLowerCase(Locale.ROOT), amount, LocalDateTime.now(), accountNumber);
             }
-            else if (transactionTypeEnum == TransactionTypeEnum.DEBIT) {
-                updateStatus = currentAcountRepo.updateByCustIdDecrement(custId.trim().toLowerCase(Locale.ROOT), amount, LocalDateTime.now(),accountNumber); }
-        }
-        catch (DataIntegrityViolationException dataIntegrityViolationException) {
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
             logger.error(dataIntegrityViolationException.getMessage());
             throw new GenericException(ExceptionMessageEnum.INSSUFFICIENT_BALANCE.name());
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             throw new GenericException(ExceptionMessageEnum.TRY_AFTER_SOMETIME.name());
         }
@@ -94,7 +101,8 @@ public class CurrentAccountDaoImpl implements CurrentAccountDao {
     @Override
     public Optional<AccountModel> getCurrentAccountEntity(String custId) {
         // Check account exists
-        Optional<CurrentAccountEntity> customerInfo = currentAcountRepo.findByCustomerIdIgnoreCase(custId.trim().toLowerCase(Locale.ROOT));
+        Optional<CurrentAccountEntity> customerInfo =
+                currentAcountRepo.findByCustomerIdIgnoreCase(custId.trim().toLowerCase(Locale.ROOT));
         return accountTransactionDto.getCurrentAccount(customerInfo);
     }
 

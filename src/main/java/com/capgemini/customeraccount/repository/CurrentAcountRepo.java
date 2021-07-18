@@ -18,11 +18,15 @@ public interface CurrentAcountRepo extends CrudRepository<CurrentAccountEntity,L
     @Transactional
     @Modifying(clearAutomatically = true) // Refresh value after update
     @Query("UPDATE current_account c SET c.amount = (c.amount + :amount) ,  lastUpdatedTime = :lastUpdatedTime WHERE lower(c.customerId) = :customerId and c.accountNumber = :accountNumber")
-    int updateByCustId(@Param("customerId") String custId,@Param("amount") BigDecimal amount, @Param("lastUpdatedTime")LocalDateTime now, @Param("accountNumber") String accountNumber);
+    int updateByCustId(@Param("customerId") String custId,@Param("amount") BigDecimal amount
+            , @Param("lastUpdatedTime")LocalDateTime now, @Param("accountNumber") String accountNumber);
 
     @Transactional
     @Modifying(clearAutomatically = true) // Refresh value after update
     @Query("UPDATE current_account c SET c.amount = (c.amount - :amount) , lastUpdatedTime = :lastUpdatedTime  WHERE lower(c.customerId) = :customerId and c.accountNumber = :accountNumber")
-    int updateByCustIdDecrement(@Param("customerId") String custId, @Param("amount") BigDecimal amount, @Param("lastUpdatedTime")LocalDateTime now, @Param("accountNumber") String accountNumber);
+    int updateByCustIdDecrement(@Param("customerId") String custId, @Param("amount") BigDecimal amount
+            , @Param("lastUpdatedTime")LocalDateTime now, @Param("accountNumber") String accountNumber);
+
+
 
 }
