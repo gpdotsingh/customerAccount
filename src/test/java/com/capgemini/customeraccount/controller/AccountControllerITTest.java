@@ -1,13 +1,18 @@
 package com.capgemini.customeraccount.controller;
 
+import com.capgemini.customeraccount.configuration.AppConfig;
+import com.capgemini.customeraccount.configuration.TransactionLogging;
 import com.capgemini.customeraccount.controller.common.DataSetUp;
+import com.capgemini.customeraccount.dao.TransactionDao;
 import com.capgemini.customeraccount.enums.AccountEnum;
+import com.capgemini.customeraccount.model.TransactionPageModel;
 import com.capgemini.customeraccount.repository.CustomerRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
@@ -16,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AccountControllerITTest {
@@ -26,12 +33,16 @@ public class AccountControllerITTest {
 
     @Autowired
     CustomerRepo customerRepo;
+    @MockBean
+    TransactionDao transactionDao;
+    @MockBean
+    RestTemplate mrestTemplate;
+    @Autowired
+    AppConfig appConfig;
 
     private TestRestTemplate restTemplate;
     private static HttpHeaders headers;
     private StringBuilder customerControllerURL = new StringBuilder();
-    @Mock
-    private RestTemplate mockRestTemplate;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -46,9 +57,17 @@ public class AccountControllerITTest {
     @Test
     public void createAccountHappyFlow() {
         setURL("/customer4", "amount=33&transactionType=CREDIT  ",AccountEnum.CURRENT.toString());
+
+
+        ResponseEntity mocResponse = new ResponseEntity("Some json string", HttpStatus.OK);
+
+        Mockito.when(mrestTemplate.getForEntity(appConfig.getTransactioTypeURL().toString(),TransactionPageModel.class))
+                .thenReturn(mocResponse );
+
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString()
                 , HttpMethod.PUT, request, String.class).getStatusCode(),HttpStatus.CREATED);
+        Mockito.verify(transactionDao).logTransaction(any(),any(),anyString(),anyString(),anyString());
     }
 
   @Test
