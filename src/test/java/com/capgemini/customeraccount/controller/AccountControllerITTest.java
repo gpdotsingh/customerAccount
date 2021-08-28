@@ -35,8 +35,6 @@ public class AccountControllerITTest {
     CustomerRepo customerRepo;
     @MockBean
     TransactionDao transactionDao;
-    @MockBean
-    RestTemplate mrestTemplate;
     @Autowired
     AppConfig appConfig;
 
@@ -57,12 +55,6 @@ public class AccountControllerITTest {
     @Test
     public void createAccountHappyFlow() {
         setURL("/customer4", "amount=33&transactionType=CREDIT  ",AccountEnum.CURRENT.toString());
-
-
-        ResponseEntity mocResponse = new ResponseEntity("Some json string", HttpStatus.OK);
-
-        Mockito.when(mrestTemplate.getForEntity(appConfig.getTransactioTypeURL().toString(),TransactionPageModel.class))
-                .thenReturn(mocResponse );
 
         HttpEntity<String> request = new HttpEntity<>( headers);
         assertEquals(this.restTemplate.exchange(customerControllerURL.toString()
