@@ -77,3 +77,7 @@ mvn spring-boot:run
 - Scope to add more test scenario need to be included.
 - All parameters for request are in header 
   .Have scope to refactor that to put request parameter and params in body.
+  
+  
+  
+  curl -X POST https://chatbotservices-gp.azurewebsites.net/qnamaker/knowledgebases/fda86660-7200-44a3-a777-91f1dda371d2/generateAnswer -H "Authorization: EndpointKey 4ea506be-42b3-4f2e-83af-21b8367bc0fb" -H "Content-type: application/json" -d "{'question':'<Your question>'}"
