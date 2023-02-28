@@ -80,3 +80,18 @@ mvn spring-boot:run
   
   
   
+  I hope this email finds you well. I wanted to discuss some points related to our recent conversation. Involving any team member without their involvement may seem unfair to other team members. However, feel free to include anyone if you see fit.
+
+As the Scrum Master, I would appreciate it if you could address the following points:
+
+Could you please share the source of the "basics of testing"?
+Why can't a tester take a build from the user story branch & build tagged?
+Why is the Definition of Done (DOD) confirmed by you instead of being discussed and finalized in the team connect?
+Why is an invalid bug raised on Azure considered a bug, and why can't it be canceled?
+Thank you, and I look forward to your response.
+
+Best regards,
+[Your Name]
+  
+  
+  
