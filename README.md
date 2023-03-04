@@ -80,18 +80,240 @@ mvn spring-boot:run
   
   
   
-  I hope this email finds you well. I wanted to discuss some points related to our recent conversation. Involving any team member without their involvement may seem unfair to other team members. However, feel free to include anyone if you see fit.
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    return postFile(file, filename, url);
+}
 
-As the Scrum Master, I would appreciate it if you could address the following points:
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
 
-Could you please share the source of the "basics of testing"?
-Why can't a tester take a build from the user story branch & build tagged?
-Why is the Definition of Done (DOD) confirmed by you instead of being discussed and finalized in the team connect?
-Why is an invalid bug raised on Azure considered a bug, and why can't it be canceled?
-Thank you, and I look forward to your response.
+The method you provided is already correct and does not require any changes.
 
-Best regards,
-[Your Name]
+
+
+
+Gaurav Pratap Singh
+can I identify the mimetype in uploadFile method somehow 
+Yes, you can identify the MIME type of the file in the uploadFile method using Apache Tika library. Here's an updated version of the uploadFile method that includes MIME type detection:
+
+less
+Copy code
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    Tika tika = new Tika();
+    String mimeType = tika.detect(file.blockFirst().asInputStream());
+    return postFile(file, filename, mimeType, url);
+}
+In this updated version, we create a new instance of the Tika class, which we then use to detect the MIME type of the file. We pass the MIME type to the postFile method, which is responsible for actually uploading the file.
+
+
+
+
+Gaurav Pratap Singh
+ok write the method same as I am pasting
+
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    return postFile(file, filename, url);
+}
+
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
+Sure, here's the code:
+
+less
+Copy code
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) throws IOException {
+    String mimeType = new Tika().detect(file.blockFirst().asInputStream());
+    return postFile(file, filename, url, mimeType);
+}
+
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url, String mimeType) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.parseMediaType(mimeType))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
+
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    return postFile(file, filename, url);
+}
+
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
+
+
+Save & Submit
+
+Cancel
+The method you provided is already correct and does not require any changes.
+
+
+
+
+Gaurav Pratap Singh
+can I identify the mimetype in uploadFile method somehow 
+Yes, you can identify the MIME type of the file in the uploadFile method using Apache Tika library. Here's an updated version of the uploadFile method that includes MIME type detection:
+
+less
+Copy code
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    Tika tika = new Tika();
+    String mimeType = tika.detect(file.blockFirst().asInputStream());
+    return postFile(file, filename, mimeType, url);
+}
+In this updated version, we create a new instance of the Tika class, which we then use to detect the MIME type of the file. We pass the MIME type to the postFile method, which is responsible for actually uploading the file.
+
+
+
+
+Gaurav Pratap Singh
+ok write the method same as I am pasting
+
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    return postFile(file, filename, url);
+}
+
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
+Sure, here's the code:
+
+less
+Copy code
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) throws IOException {
+    String mimeType = new Tika().detect(file.blockFirst().asInputStream());
+    return postFile(file, filename, url, mimeType);
+}
+
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url, String mimeType) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.parseMediaType(mimeType))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
+This code adds a call to Tika's detect method in the uploadFile method to determine the MIME type of the file, and passes it to the postFile method as an additional argument. The postFile method then uses this MIME type to set the Content-Type header of the HTTP request.
+
+
+
+
+@PostMapping("/uploadFile")
+public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
+                               @RequestParam("filename") String filename,
+                               @RequestParam("url") String url) {
+    return postFile(file, filename, url);
+}
+
+private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url) {
+    WebClient client = WebClient.create();
+    return client.post()
+            .uri(url)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(file, DataBuffer.class)
+            .exchangeToMono(response -> {
+                if (response.statusCode().is2xxSuccessful()) {
+                    return Mono.just("File uploaded successfully");
+                } else {
+                    return Mono.error(new RuntimeException("Failed to upload file"));
+                }
+            });
+}
+
+
+
+
   
   
   
