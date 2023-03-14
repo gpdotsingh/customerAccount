@@ -100,3 +100,52 @@ I would also like to have a discussion with you, Shiva, regarding the email that
 Thank you for your understanding and cooperation.
 Best regards,
 [Your Name]
+
+
+--------------------------------------------------------
+
+
+
+Dear Shiva & Ishwarya,
+
+First of all I would like to thanks to both of you that you both came forward as chapter lead try to build team bonding and bring some more transparency inside team.
+As asked by both of you for feedback I am writing this mail, enclosing the events that happened and as a Scrum master I told you verbally earlier.
+
+I really appreciate your effort at the same time I am sorry to respond so late, as I was involved in some other tasks and the whole mail contains so many things even after making it shorter it’s way to huge. 
+
+
+-  I would suggest that you explain the incident in detail to the team as some members were unaware of the email and the situation. 
+- As a team we should encourage the more T shaped or comb shaped attribute which it seems that these type of incidents put some fear among the team member.
+- Accountability of task is very much necessary but that must be improved by reviewing team member works and performing blameless postmortem.
+-  We should avoid multiple invalid bugs as it can be time-consuming and impact our deliverables.
+- At the same time I expect you as a Chapterlead if any of us is dropping a mail must contain authentic and proper information which I saw to be overlooked when Sushmita dropped mail looping Shiva where few of the points are were not a single person decision and I raised the same point as well to Shiva.
+- At the same time if team member is skipping any team meeting he/she must inform the scrum master at least later which I found one of the root cause here also.
+- I believe that before sending emails, we should ensure that decisions are not forced by one person, as this can create misunderstandings and confusion. For example, Sushmita sent an email that contained some points that were not proper, and I requested that Shiva respond to the same email to avoid any misunderstandings. 
+
+Furthermore, . Lastly, if someone cannot attend team meetings, they should inform the Scrum master in advance to prevent any issues.
+To provide context, I have also enclosed the events that happened recently. 
+
+Sequence of events:
+
+- Sushmita raised a concern on Wednesday, February 22th, that Rama did not complete a story properly. 
+
+- However, as the Scrum Master, I was busy with other tasks, including preparing the RCA of production issues and their discussions. 
+- On Thursday, February 23th, I discussed the issue with Rama before refinement, and he mentioned that the creation of the postman suite was not mentioned in the US, which was created by Sushmita.
+- Same day i thought to have discussion in starting time the during refinement which we use for sharing the daily status also sometimes, but Sushmita skipped the refinement due to unknown reasons, so discussion didn't took place.
+- After explaining to Rama that in testing user story normally we create and maintain the Postman test suite, he get agreed to do the same, but as he was the ops of the sprint so have to consider the workload as well .
+- On Friday 24 Feb 2023, as  Rama was doing the testing User story first time, keeping these things in my mind I started having the discussion same with Sushmita and Rama , where Ram was also pulled in same discussion by Sushmita and there we agreed that i will fix the issues and for same I will connect with Sushmita for 15 mins so that I can sync up with the test cases and setup and can verify the basics.
+- After some time I tried to connect to Sushmita , she refused to come on the call stating that she explained it 3 times to Rama and he made these mistake, so considering all points I suggested let's not take risk and request to connect to her over call and can see what all bugs are and at the same time I can use the same test suite what Sushmita is referring and can set up in my system and than can do the testing maybe on my local and can fix the bugs quickly and easily.
+- Had chat with Sushmita where finally she refused to come on call, later I download the collection setup it on my system and involve Rama and found that build was wrong, the build tagged in the previous user story was not picked and deployed by Sushmita.
+- At the same day we had standup where Sushmita missed that too.
+- Later I informed about the mistake made by Sushmita, so on the same old bug she deleted the content and raise the new bug, and after same she raised other three bugs so in total it was 4 new bugs.
+- As a team and individual also we spend time to give answers of each bug  and check the test cases which cost a lot of time, and found out later that all the bugs were invalid.
+- Also she dropped the mail to team which I found to be not unto the mark , on the same I would like to have discussion with you Shiva, because you are looped into the same mail and I expect some response from you as well to understand below points
+    - “”
+    - “”
+
+End of event
+
+- This process cost us a lot of time, and Sushmita's email to the team was inappropriate, as it seemed to force certain things on the team.
+Thank you for taking the time to read my email. I hope we can work together to improve our team's performance and avoid such incidents in the future.
+Best regards,
+[Your Name]
