@@ -79,27 +79,43 @@ mvn spring-boot:run
   .Have scope to refactor that to put request parameter and params in body.
   
 Dear Shiva & Ishwarya,
-I would like to thank you both for your effort in building team bonding and transparency as chapter leads. I apologize for responding late to your request for feedback.
-Here are the points that I would like to address:
-1. I suggest explaining the incident in detail to the team, as some members were unaware of the email and the situation.
-2. We should encourage the more T-shaped or comb-shaped attribute as a team, as incidents like these can create fear among team members.
-3. Task accountability should be improved by reviewing team member work and performing blameless postmortem.
-4. We should avoid multiple invalid bugs, as they can be time-consuming and impact our deliverables.
-5. Chapter leads must ensure that any email sent contains authentic and proper information. For example, Sushmita sent an email that contained some points that were not proper, and I requested that Shiva respond to the same email to avoid any misunderstandings.
-6. If a team member is skipping any team meeting, they must inform the Scrum master at least later, which I found to be a root cause of the incident.
-7. Before sending emails, we should ensure that decisions are not forced by one person, as this can create misunderstandings and confusion.
-In addition, to provide context, I have enclosed the sequence of events that happened recently:
--  On Wednesday, February 22nd, Sushmita raised a concern that Rama did not complete a story properly.
-- On Thursday, February 23rd, I discussed the issue with Rama before refinement, and he mentioned that the creation of the postman suite was not mentioned in the US, which was created by Sushmita.
--  Sushmita skipped the refinement meeting on the same day, so we couldn't have a discussion.
--  On Friday, February 24th, I had a discussion with Sushmita and Rama, and we agreed that I would fix the issues and sync up with Sushmita for 15 minutes to verify the basics.
--  Sushmita refused to come on the call, and I downloaded the collection to set up on my system and found that the build was wrong.
-- Sushmita missed the standup on the same day.
-- Later, I informed the team about the mistake made by Sushmita, and she raised four new bugs that were later found to be invalid.
-I would also like to have a discussion with you, Shiva, regarding the email that Sushmita sent, as you were looped into the same email.
+I would like to express my gratitude for the effort you both have put in building team bonding and transparency as chapter leads. At the same time, I apologize for responding late to your request for feedback after the last session.
+
+Here are some points I would like to address as feedback from the last session that I feel should be included in our discussion or need more clarity during discussion. I would also like to clarify that I am writing them, considering the issue that I reported a few days back to both of you:
+
+1. I suggest explaining the incident in detail to the team, as some members were unaware of the incident & email what Shiva mentioned during our last team discussion.
+2. We should encourage the more T-shaped or comb-shaped attribute as a team, as incidents like these can bring lots of hesitation in team members to pick new types of User Stories (considering points F & H). 
+3. Kindly address task accountability, which should be improved by reviewing team member work and performing blameless postmortems, instead of asking questions only after the mistake happen.
+4. As requested earlier, kindly also address avoiding multiple invalid bugs as they can be time-consuming and impact our deliverables in the past.
+5. Kindly also address the issue that emails sent to the team should contain authentic and proper information like in the current case where one team member sent an email that contained some points that were not proper, and I requested that Shiva respond to the same email to avoid any misunderstandings as he was also looped in the mail.
+6. If a team member is skipping any team meeting, they must inform the Scrum master at least later, which I found to be a root cause of the incident(Point F & G).
+7. Before sending emails, we should ensure that decisions is a mutual agreement among the team not the decision of one(Point I).
+
+In addition, to provide context, I have enclosed the sequence of events in very short that happened recently which bring this whole discussion on the ground:
+
+A- On Wednesday, February 22nd, Sushmita raised a concern that Rama did not complete a story properly.
+B- On Thursday, February 23rd, I discussed the issue with Rama before refinement, and he mentioned that the creation of the postman suite was not mentioned in the US, which was created by Sushmita.
+C- Sushmita skipped the refinement meeting on the same day, so we couldn't have a discussion. 
+D- Also when I explained Rama that a testing user story the postman collection should be created for each user case and each user case must be .
+E - On Friday, February 24th, I had a discussion with Sushmita and Rama where in later part Ram was also pulled in discussion by Sushmita, and we agreed that I would fix the issues and sync up with Sushmita for 15 minutes to verify the basics.
+F - Sushmita refused to come on the call and on chat she keep on iterating as it was picked by the Rama so it is only his responsibility to fix it up and she will not help anymore to any member in team, as my postman collections was corrupted a week before so had to reinstall the postman  and hence I have to downloaded the collection to set up on my system and found that the build was wrong.
+G - Sushmita missed the standup on the same day Friday, February 24th.
+H - Later, I informed the team about the mistake made by Sushmita, and she raised four new bugs that were later found to be invalid.
+I - To close those bugs we spend ample amount of time which could be easily checked and closed by the normal discussions.
+
+I would also like to have a discussion with you Shiva and expect your response on below two points how it is correct where you were also looped in the mail where it states below mentioned points
+ i ) Copy it from mail
+ ii)  
+
+Note: In my opinion it seems to be some individual problem instead of teams problem. And above mentioned incident attributes are not practiced by other team members 
+
+I hope both of you have already understood the situation and after the next session’s you take it will bring more confidence and harmony in team which will make our team more strong. 
+
 Thank you for your understanding and cooperation.
+
 Best regards,
 [Your Name]
+
 
 
 --------------------------------------------------------
