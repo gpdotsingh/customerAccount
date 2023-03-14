@@ -78,25 +78,25 @@ mvn spring-boot:run
 - All parameters for request are in header 
   .Have scope to refactor that to put request parameter and params in body.
   
-  @PostMapping("/uploadFile")
-public Mono<String> uploadFile(@RequestPart("file") Flux<DataBuffer> file,
-                               @RequestParam("filename") String filename,
-                               @RequestParam("url") String url) {
-    return postFile(file, filename, url);
-}
-
-private Mono<String> postFile(Flux<DataBuffer> file, String filename, String url) {
-    WebClient client = WebClient.create();
-    return client.post()
-            .uri(url)
-            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-            .body(file, DataBuffer.class)
-            .exchangeToMono(response -> {
-                if (response.statusCode().is2xxSuccessful()) {
-                    return Mono.just("File uploaded successfully");
-                } else {
-                    return Mono.error(new RuntimeException("Failed to upload file"));
-                }
-            });
-}
+Dear Shiva & Ishwarya,
+I would like to thank you both for your effort in building team bonding and transparency as chapter leads. I apologize for responding late to your request for feedback.
+Here are the points that I would like to address:
+1. I suggest explaining the incident in detail to the team, as some members were unaware of the email and the situation.
+2. We should encourage the more T-shaped or comb-shaped attribute as a team, as incidents like these can create fear among team members.
+3. Task accountability should be improved by reviewing team member work and performing blameless postmortem.
+4. We should avoid multiple invalid bugs, as they can be time-consuming and impact our deliverables.
+5. Chapter leads must ensure that any email sent contains authentic and proper information. For example, Sushmita sent an email that contained some points that were not proper, and I requested that Shiva respond to the same email to avoid any misunderstandings.
+6. If a team member is skipping any team meeting, they must inform the Scrum master at least later, which I found to be a root cause of the incident.
+7. Before sending emails, we should ensure that decisions are not forced by one person, as this can create misunderstandings and confusion.
+In addition, to provide context, I have enclosed the sequence of events that happened recently:
+-  On Wednesday, February 22nd, Sushmita raised a concern that Rama did not complete a story properly.
+- On Thursday, February 23rd, I discussed the issue with Rama before refinement, and he mentioned that the creation of the postman suite was not mentioned in the US, which was created by Sushmita.
+-  Sushmita skipped the refinement meeting on the same day, so we couldn't have a discussion.
+-  On Friday, February 24th, I had a discussion with Sushmita and Rama, and we agreed that I would fix the issues and sync up with Sushmita for 15 minutes to verify the basics.
+-  Sushmita refused to come on the call, and I downloaded the collection to set up on my system and found that the build was wrong.
+- Sushmita missed the standup on the same day.
+- Later, I informed the team about the mistake made by Sushmita, and she raised four new bugs that were later found to be invalid.
+I would also like to have a discussion with you, Shiva, regarding the email that Sushmita sent, as you were looped into the same email.
+Thank you for your understanding and cooperation.
+Best regards,
+[Your Name]
